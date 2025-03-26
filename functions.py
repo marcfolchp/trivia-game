@@ -241,7 +241,7 @@ def create_question():
 
 # --------- STREAMLIT ---------
 
-uri = f"mongodb+srv://marcfolch:password1234@cluster0.pxpov.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+uri = f"mongodb+srv://{db_user}:{db_pass}@cluster0.pxpov.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(uri)
 db = client['capitals-game']
 users_collection = db['capitals-game']
