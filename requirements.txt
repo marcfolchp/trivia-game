@@ -1,0 +1,4 @@
+cohere
+pymongo
+streamlit
+python-dotenv
