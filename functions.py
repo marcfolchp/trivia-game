@@ -9,8 +9,6 @@ import os
 
 # --------- CREDENTIALS ---------
 
-load_dotenv()
-
 db_user = st.secrets['MONGO']["DB_USER"]
 db_pass = st.secrets['MONGO']["DB_PASS"]
 api_key = st.secrets['MONGO']["API_KEY"]
