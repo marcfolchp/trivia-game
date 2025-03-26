@@ -11,9 +11,9 @@ import os
 
 load_dotenv()
 
-db_user = os.getenv("DB_USER")
-db_pass = os.getenv("DB_PASS")
-api_key = os.getenv("API_KEY")
+db_user = st.secrets['MONGO']["DB_USER"]
+db_pass = st.secrets['MONGO']["DB_PASS"]
+api_key = st.secrets['MONGO']["API_KEY"]
 
 # --------- GAME ---------
 
