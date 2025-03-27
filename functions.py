@@ -7,6 +7,7 @@ import streamlit as st
 from dotenv import load_dotenv
 import os
 import pandas as pd
+import time
 
 # --------- CREDENTIALS ---------
 
@@ -299,6 +300,13 @@ def add_one(username, column):
 def handle_answer(user_answer, question):
     correct_answer = question["answer"]
     category = question["category"]
+
+    if user_answer == correct_answer:
+        st.success('CORRECT ANSWER')
+    else:
+        st.error('WRONG ANSWER')
+
+    time.sleep(3)
 
     # Update score based on correctness
     if user_answer == correct_answer:
