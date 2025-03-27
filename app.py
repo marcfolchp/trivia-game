@@ -1,5 +1,5 @@
 import streamlit as st
-from functions import check_credentials, register_user, switch_page, login, create_question, add_one
+from functions import check_credentials, register_user, switch_page, login, create_question, handle_answer
 import time
 
 st.set_page_config(page_title="TRIVIA", page_icon="🔑")
@@ -62,11 +62,12 @@ elif st.session_state["page"] == "register":
 
 # --------- HOME GAME ---------
 
+if "current_question" not in st.session_state:
+    st.session_state["current_question"] = create_question()
+
 if st.session_state["page"] == "home":
 
-    time.sleep(5)
-
-    question = create_question()
+    question = st.session_state["current_question"]  # Use the stored question
 
     st.markdown(f"<h1 style='text-align: center;'>{question['question']} --- {question['category']}</h1>", unsafe_allow_html=True)
 
@@ -75,17 +76,9 @@ if st.session_state["page"] == "home":
     # Place the True button in the first column
     with b:
         if st.button("True"):
-            if question['answer'] == True:
-                add_one(st.session_state["username"], question['category'])
-                add_one(st.session_state["username"], f"total")
-            else:
-                add_one(st.session_state["username"], f"total")
+            handle_answer(True, question)
 
     # Place the False button in the right column, centered
     with c:
         if st.button("False"):
-            if question['answer'] == False:
-                add_one(st.session_state["username"], question['category'])
-                add_one(st.session_state["username"], f"total")
-            else:
-                add_one(st.session_state["username"], f"total")
+            handle_answer(False, question)

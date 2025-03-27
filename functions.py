@@ -272,3 +272,20 @@ def add_one(username, column):
     {"username": username},
     {"$inc": {column: 1}}
     )
+
+def handle_answer(user_answer, question):
+    correct_answer = question["answer"]
+    category = question["category"]
+
+    # Update score based on correctness
+    if user_answer == correct_answer:
+        add_one(st.session_state["username"], category)
+        add_one(st.session_state["username"], "total")
+    else:
+        add_one(st.session_state["username"], "total")
+
+    # Generate and store a new question
+    st.session_state["current_question"] = create_question()
+
+    # Force a rerun to display the new question
+    st.experimental_rerun()
