@@ -156,13 +156,13 @@ if st.session_state["page"] == "home":
                     f"<tr style='font-weight: bold; background-color: lightyellow;'>"
                     f"<td>{row['Username']}</td>"
                     f"<td>{row['Questions Taken']}</td>"
-                    f"<td>{row['Percentage Correct']}</td></tr>"
+                    f"<td>{round(row['Percentage Correct'], 2)}</td></tr>"
                 )
             else:
                 styled_table += (
                     f"<tr><td>{row['Username']}</td>"
                     f"<td>{row['Questions Taken']}</td>"
-                    f"<td>{row['Percentage Correct']}</td></tr>"
+                    f"<td>{round(row['Percentage Correct'], 2)}</td></tr>"
                 )
 
         # Close HTML table
