@@ -283,12 +283,12 @@ def register_user(username, password):
 
 def switch_page(page):
     st.session_state["page"] = page
-    st.experimental_rerun()
+    st.rerun()
 
 def login(page, user):
     st.session_state["page"] = page
     st.session_state["username"] = user
-    st.experimental_rerun()
+    st.rerun()
 
 def add_one(username, column):
     users_collection.update_one(
@@ -311,7 +311,7 @@ def handle_answer(user_answer, question):
     st.session_state["current_question"] = create_question()
 
     # Force a rerun to display the new question
-    st.experimental_rerun()
+    st.rerun()
 
 def global_ranking():
     data = list(users_collection.find())
