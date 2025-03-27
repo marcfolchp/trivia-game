@@ -266,3 +266,9 @@ def login(page, user):
     st.session_state["page"] = page
     st.session_state["username"] = user
     st.rerun()
+
+def add_one(username, column):
+    users_collection.update_one(
+    {"username": username},
+    {"$inc": {column: 1}}
+    )
