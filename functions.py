@@ -302,9 +302,9 @@ def handle_answer(user_answer, question):
     category = question["category"]
 
     if user_answer == correct_answer:
-        st.success('CORRECT ANSWER')
+        st.success('CORRECT')
     else:
-        st.error('WRONG ANSWER')
+        st.error('WRONG')
 
     time.sleep(3)
 

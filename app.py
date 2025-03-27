@@ -89,7 +89,7 @@ if st.session_state["page"] == "home":
 
         st.markdown(f"<h1 style='text-align: center;'>{question['question']}</h1>", unsafe_allow_html=True)
 
-        a, b, c, d = st.columns([10, 4, 4, 10])
+        a, b, c, d = st.columns([10, 5, 5, 10])
 
         with b:
             if st.button("True"):
