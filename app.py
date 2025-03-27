@@ -64,6 +64,8 @@ elif st.session_state["page"] == "register":
 
 if st.session_state["page"] == "home":
 
+    time.sleep(5)
+
     question = create_question()
 
     st.markdown(f"<h1 style='text-align: center;'>{question['question']} --- {question['category']}</h1>", unsafe_allow_html=True)
