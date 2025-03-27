@@ -6,6 +6,7 @@ from pymongo import MongoClient
 import streamlit as st
 from dotenv import load_dotenv
 import os
+import pandas as pd
 
 # --------- CREDENTIALS ---------
 
@@ -255,17 +256,39 @@ def register_user(username, password):
         return False
     
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
-    users_collection.insert_one({'username': username, 'password': hashed_password})
+    
+    user_data = {
+    'username': username, 
+    'password': hashed_password,
+    'Art_correct': int(0),
+    'Art_total': 0,
+    'Geography_correct': 0,
+    'Geography_total': 0,
+    'History_correct': 0,
+    'History_total': 0,
+    'Sports_correct': 0,
+    'Sports_total': 0,
+    'Music_correct': 0,
+    'Music_total': 0,
+    'Entertainment_correct': 0,
+    'Entertainment_total': 0,
+    'Literature_correct': 0,
+    'Literature_total': 0,
+    'Science_correct': 0,
+    'Science_total': 0,
+}
+
+    users_collection.insert_one(user_data)
     return True
 
 def switch_page(page):
     st.session_state["page"] = page
-    st.rerun()
+    st.experimental_rerun()
 
 def login(page, user):
     st.session_state["page"] = page
     st.session_state["username"] = user
-    st.rerun()
+    st.experimental_rerun()
 
 def add_one(username, column):
     users_collection.update_one(
@@ -279,13 +302,51 @@ def handle_answer(user_answer, question):
 
     # Update score based on correctness
     if user_answer == correct_answer:
-        add_one(st.session_state["username"], category)
-        add_one(st.session_state["username"], "total")
+        add_one(st.session_state["username"], f"{category}_correct")
+        add_one(st.session_state["username"], f"{category}_total")
     else:
-        add_one(st.session_state["username"], "total")
+        add_one(st.session_state["username"], f"{category}_total")
 
     # Generate and store a new question
     st.session_state["current_question"] = create_question()
 
     # Force a rerun to display the new question
     st.experimental_rerun()
+
+def global_ranking():
+    data = list(users_collection.find())
+    df = pd.DataFrame(data)
+
+    total_columns = [col for col in df.columns if '_total' in col]
+    correct_columns = [col for col in df.columns if '_correct' in col]
+
+    # Compute the sum of these columns row-wise
+    df['total_taken'] = df[total_columns].sum(axis=1)
+    df['total_correct'] = df[correct_columns].sum(axis=1)
+    df['percentage'] = (df['total_correct'] / df['total_taken']) * 100
+
+    df = df[['username', 'total_taken', 'percentage']]
+    df.columns = ['Username', 'Questions Taken', 'Percentage Correct']
+
+    df = df.sort_values(by=['Percentage Correct', 'Questions Taken'], ascending=[False, False])
+    df = df.reset_index(drop=True)
+
+    df.index = df.index + 1
+
+    return df
+
+def user_stats(username, users_collection=users_collection):
+    data = list(users_collection.find())
+    df = pd.DataFrame(data)
+    df = df[df['username']==username]
+
+    jaison = {'Art':[df['Art_correct'].values[0]/df['Art_total'].values[0], int(df['Art_total'].values[0])],
+                'Geography':[df['Geography_correct'].values[0]/df['Geography_total'].values[0], int(df['Geography_total'].values[0])],
+                'History':[df['History_correct'].values[0]/df['History_total'].values[0], int(df['History_total'].values[0])],
+                'Sports':[df['Sports_correct'].values[0]/df['Sports_total'].values[0], int(df['Sports_total'].values[0])],
+                'Music':[df['Music_correct'].values[0]/df['Music_total'].values[0], int(df['Music_total'].values[0])],
+                'Entertainment':[df['Entertainment_correct'].values[0]/df['Entertainment_total'].values[0], int(df['Entertainment_total'].values[0])],
+                'Literature':[df['Literature_correct'].values[0]/df['Literature_total'].values[0], int(df['Literature_total'].values[0])],
+                'Science':[df['Science_correct'].values[0]/df['Science_total'].values[0], int(df['Science_total'].values[0])]
+                }
+    return jaison
