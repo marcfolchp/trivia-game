@@ -306,8 +306,6 @@ def handle_answer(user_answer, question):
     else:
         st.error('WRONG')
 
-    time.sleep(3)
-
     # Update score based on correctness
     if user_answer == correct_answer:
         add_one(st.session_state["username"], f"{category}_correct")
